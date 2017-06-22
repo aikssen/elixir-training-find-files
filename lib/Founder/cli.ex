@@ -10,9 +10,13 @@ defmodule Founder.CLI do
   def process({opts, filename}) do
     path = define_path(opts[:source])
 
-    File.ls!(path)
-    |> find(filename)
-    |> print
+    cond do
+      File.dir?(path) -> 
+        File.ls!(path)
+        |> find(filename)
+        |> print
+      true -> IO.puts "Error: The given path cannot be found"  
+    end
   end
 
   @doc """
