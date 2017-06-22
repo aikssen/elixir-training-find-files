@@ -6,12 +6,12 @@ path where the executable is located.
 
 ## Installation
 
-In order to test the project it must be compiled with:
+In order to run the project it must be compiled with:
 
 ```shell
 $ mix escript.build
 ```
-Then the find file can be performed with the command:
+Then search file can be performed with the command:
 
 
 ```shell
