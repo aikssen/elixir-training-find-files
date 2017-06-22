@@ -9,23 +9,13 @@ defmodule Founder.CLI do
   """
   def process({opts, filename}) do
     path = define_path(opts[:source])
-
+    
     cond do
       File.dir?(path) -> 
-        File.ls!(path)
-        |> find(filename)
+        Path.wildcard("#{path}/#{filename}")
         |> print
       true -> IO.puts "Error: The given path cannot be found"  
     end
-  end
-
-  @doc """
-  Find a given file into a specific path
-  """
-  def find(files, filename) do
-    IO.inspect files
-    Enum.filter(files, fn(file) -> 
-      String.downcase(file) == String.downcase(filename) end)
   end
 
 
@@ -64,13 +54,15 @@ defmodule Founder.CLI do
   # find the file README inside the /Users folder
   ```
   """
-  def parse_args(args) do
+  def parse_args(argv) do
     {opts, filename, _} = OptionParser.parse(
-      args,
+      argv,
       strict: [recursive: :boolean, verbose: :boolean, source: :string],
       aliases: [r: :recursive, v: :verbose, s: :source]
     )
+    #TODO: OptionParse has a bug when `./founder *.exs`
+    #it will parse the `filename` variable as `["mix.exs"]`, we need the raw value `*.exs`
 
-    {Enum.into(opts, %{}), Enum.at(filename, 0)}
+    {opts, Enum.at(filename, 0)}
   end
 end
